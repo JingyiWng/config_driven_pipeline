@@ -1,8 +1,11 @@
 # Databricks notebook source
-
 # MAGIC %md
 # MAGIC ## 00 — Setup
 # MAGIC Run this first. Creates the config table and fake source data.
+
+# COMMAND ----------
+
+spark.sql("USE CATALOG jenn_config_driven_pipeline")
 
 # COMMAND ----------
 
@@ -27,6 +30,10 @@ spark.sql("""
   (3, 'fx_rates',     'finance.raw_fx_rates',     'finance.clean_fx_rates',     true),
   (4, 'loans',        'finance.raw_loans',         'finance.clean_loans',        false)
 """)
+
+# COMMAND ----------
+
+display(spark.table("finance.pipeline_config"))
 
 # COMMAND ----------
 
@@ -56,3 +63,15 @@ spark.createDataFrame(acct_data).write.mode("overwrite").saveAsTable("finance.ra
 spark.createDataFrame(fx_data).write.mode("overwrite").saveAsTable("finance.raw_fx_rates")
 
 print("Setup complete.")
+
+# COMMAND ----------
+
+display(spark.table("finance.raw_transactions"))
+
+# COMMAND ----------
+
+display(spark.table("finance.raw_accounts"))
+
+# COMMAND ----------
+
+display(spark.table("finance.raw_fx_rates"))

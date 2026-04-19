@@ -1,5 +1,4 @@
 # Databricks notebook source
-
 # MAGIC %md
 # MAGIC ## 01 — Base Pipeline
 # MAGIC **Your task:** implement the `BasePipeline` class below.
@@ -13,19 +12,30 @@
 
 # COMMAND ----------
 
+spark.sql("USE CATALOG jenn_config_driven_pipeline")
+
+# COMMAND ----------
+
 class BasePipeline:
 
     def __init__(self, name: str, source: str, target: str):
-        pass
+        self.name = name
+        self.source = source
+        self.target = target
 
     def extract(self):
-        pass
+        df = spark.table(self.source)
+        return df
 
     def transform(self, df):
-        pass
+        df_transformed = df
+        return df_transformed
 
     def load(self, df):
-        pass
+        df.write.mode("overwrite").format("delta").saveAsTable(self.target)
+        
 
     def run(self):
-        pass
+        df = self.extract()
+        df_transformed = self.transform(df)
+        self.load(df_transformed)
